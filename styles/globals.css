@@ -12,3 +12,7 @@
     src: url("../assets/fonts/Mona-Sans.var.woff2") format("woff2");
   }
 }
+
+.step-item:not(:first-child):before {
+  @apply content-[''] bg-slate-200 absolute w-full h-[3px] -translate-x-full top-1/2 -translate-y-2/4;
+}
