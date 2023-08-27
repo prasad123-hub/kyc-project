@@ -30,7 +30,7 @@ const Header = () => {
       <h1 className="text-2xl">
         <span className="font-display font-semibold">Acme</span>Bank.
       </h1>
-      <Button>SignIn</Button>
+      <Button rounded>SignIn</Button>
     </div>
   );
 };
