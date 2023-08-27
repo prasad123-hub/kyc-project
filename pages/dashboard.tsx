@@ -1,39 +1,14 @@
 import { MoveDown, Check } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { nextStep, previousStep } from "@/slices/StepSlice";
+import { useDispatch } from "react-redux";
 
 export default function Dashboard() {
-  const [step, setStep] = useState(1);
-  const steps = [
-    {
-      id: 1,
-      title: "Step 1",
-      stepNumber: 1,
-      description: "Personal Details",
-    },
-    {
-      id: 2,
-      title: "Step 2",
-      stepNumber: 2,
-      description: "KYC Details",
-    },
-    {
-      id: 3,
-      title: "Step 3",
-      stepNumber: 3,
-      description: "Bank Information",
-    },
-  ];
-
-  function nextStep() {
-    if (step < 4) setStep((prev) => prev + 1);
-  }
-
-  function back() {
-    if (step > 1) setStep((prev) => prev - 1);
-  }
-
-  console.log(step);
+  const { currentStep, steps } = useAppSelector((state) => state.step);
+  const dispatch = useDispatch();
+  console.log(currentStep);
 
   return (
     <>
@@ -48,28 +23,34 @@ export default function Dashboard() {
             {steps.map((item) => (
               <Step
                 key={item.id}
-                currentStep={step}
+                currentStep={currentStep}
                 step={item}
                 stepOrder={item.stepNumber}
-                setStep={setStep}
+                // setStep={setStep}
               />
             ))}
           </div>
         </div>
         <div className="">
-          {/* <button onClick={back} className="bg-red-300">
+          <button
+            onClick={() => dispatch(previousStep())}
+            className="bg-red-300"
+          >
             Previous
           </button>
-          <button onClick={nextStep} className="bg-yellow-300">
+          <button
+            onClick={() => dispatch(nextStep())}
+            className="bg-yellow-300"
+          >
             Next
-          </button> */}
+          </button>
         </div>
       </div>
     </>
   );
 }
 
-const Step = ({ step, stepOrder, setStep, currentStep }: any) => {
+const Step = ({ step, stepOrder, currentStep }: any) => {
   const status =
     currentStep === stepOrder
       ? "active"
@@ -85,7 +66,6 @@ const Step = ({ step, stepOrder, setStep, currentStep }: any) => {
             <div>
               <div className="flex items-center justify-center w-10 h-10 border rounded-full">
                 <motion.div
-                  onClick={() => setStep(stepOrder)}
                   initial={false}
                   animate={status}
                   transition={{ duration: 0.5 }}
