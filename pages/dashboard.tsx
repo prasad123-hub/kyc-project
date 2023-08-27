@@ -1,24 +1,18 @@
-import { MoveDown, Check } from "lucide-react";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { nextStep, previousStep } from "@/slices/StepSlice";
-import { useDispatch } from "react-redux";
+import { KYCForms } from "@/components/Forms/KYCForms";
+import { FadeIn, FadeInStagger } from "@/components/FadeIn";
+import withAuth from "@/HOC/withAuth";
 
-export default function Dashboard() {
+function Dashboard() {
   const { currentStep, steps } = useAppSelector((state) => state.step);
-  const dispatch = useDispatch();
-  console.log(currentStep);
+  const dispatch = useAppDispatch();
 
   return (
     <>
       <div className="grid lg:grid-cols-[1fr,2fr] gap min-h-screen overflow-y-scroll">
         <div className="relative bg-black hidden lg:flex lg:items-center lg:justify-center">
-          <div className="fixed top-10 left-10">
-            <h1 className="text-2xl text-white">
-              <span className="font-display font-semibold">Acme</span>Bank.
-            </h1>
-          </div>
           <div className="fixed top-1/3">
             {steps.map((item) => (
               <Step
@@ -26,24 +20,12 @@ export default function Dashboard() {
                 currentStep={currentStep}
                 step={item}
                 stepOrder={item.stepNumber}
-                // setStep={setStep}
               />
             ))}
           </div>
         </div>
         <div className="">
-          <button
-            onClick={() => dispatch(previousStep())}
-            className="bg-red-300"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => dispatch(nextStep())}
-            className="bg-yellow-300"
-          >
-            Next
-          </button>
+          <KYCForms />
         </div>
       </div>
     </>
@@ -60,11 +42,15 @@ const Step = ({ step, stepOrder, currentStep }: any) => {
 
   return (
     <>
-      <div>
+      <FadeIn>
         <div className="flex">
           <div className="flex flex-col items-center mr-10">
             <div>
-              <div className="flex items-center justify-center w-10 h-10 border rounded-full">
+              <div
+                className={`flex items-center justify-center w-10 h-10 border rounded-full transition-all duration-75 ${
+                  status === "active" ? "border-red-400" : ""
+                }`}
+              >
                 <motion.div
                   initial={false}
                   animate={status}
@@ -86,7 +72,7 @@ const Step = ({ step, stepOrder, currentStep }: any) => {
             <p className="text-white/80">{step.description}</p>
           </div>
         </div>
-      </div>
+      </FadeIn>
     </>
   );
 };
@@ -117,3 +103,5 @@ function CheckIcon() {
     </svg>
   );
 }
+
+export default withAuth(Dashboard);

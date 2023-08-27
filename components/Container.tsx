@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { useAuth } from "@/context/AuthContext";
 import { SignInButton } from "./SignInButton";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 type ContainerProps<T extends React.ElementType> = {
   as?: T;
@@ -31,12 +32,13 @@ export function Container<T extends React.ElementType = "div">({
 const Header = () => {
   const router = useRouter();
   const { logout, user } = useAuth();
-  console.log(user);
   return (
-    <div className="flex items-center justify-between py-6 mt-6">
-      <h1 className="text-2xl">
-        <span className="font-display font-semibold">Acme</span>Bank.
-      </h1>
+    <div className="flex items-center justify-between py-6 mt-6 border-b">
+      <Link href="/">
+        <h1 className="text-2xl">
+          <span className="font-display font-semibold">Acme</span>Bank.
+        </h1>
+      </Link>
       <div className="space-x-4">
         {user?.uid ? (
           <>
@@ -64,6 +66,7 @@ const Header = () => {
                 );
                 if (confirm) {
                   logout();
+                  router.push("/");
                 }
               }}
             >
