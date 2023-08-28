@@ -15,9 +15,7 @@ export default function Home() {
             miss out on your chance to be a part of something big – sign up
             today and unlock a universe of savings!
           </p>
-          <Button invert rounded className="mt-8">
-            Complete Your KYC Today
-          </Button>
+          <Button className="mt-8">Complete Your KYC Today</Button>
         </FadeIn>
       </Container>
     </>

@@ -42,36 +42,39 @@ const Header = () => {
       <div className="space-x-4">
         {user?.uid ? (
           <>
-            <Button
-              onClick={() => {
-                router.push(`/dashboard`);
-              }}
-              className="flex"
-            >
-              <img
-                src={user.photoURL || ""}
-                alt="profile_image"
-                className="md:w-5 h-6 md:h-5 w-6 rounded-full object-cover inline-flex md:mr-2 border-[1px] dark:border-white border-zinc-900"
-              />
-              <span className="md:inline-block hidden">
-                {user.displayName || "Snippng user"}
-              </span>
-            </Button>
-            <Button
-              data-testid="logout-btn"
-              invert
-              onClick={() => {
-                const confirm = window.confirm(
-                  "Are you sure you want to logout?"
-                );
-                if (confirm) {
-                  logout();
-                  router.push("/");
-                }
-              }}
-            >
-              <span className="md:block hidden">Logout</span>
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => {
+                  router.push(`/dashboard`);
+                }}
+                className="flex"
+              >
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="profile_image"
+                    className="md:w-5 h-6 md:h-5 w-6 rounded-full object-cover inline-flex md:mr-2 border-[1px] dark:border-white border-zinc-900"
+                  />
+                ) : null}
+                <span className="md:inline-block hidden">
+                  {user.displayName?.split(" ")[0] || "Snippng user"}
+                </span>
+              </Button>
+              <Button
+                data-testid="logout-btn"
+                onClick={() => {
+                  const confirm = window.confirm(
+                    "Are you sure you want to logout?"
+                  );
+                  if (confirm) {
+                    logout();
+                    router.push("/");
+                  }
+                }}
+              >
+                <span className="">Logout</span>
+              </Button>
+            </div>
           </>
         ) : (
           <SignInButton />
