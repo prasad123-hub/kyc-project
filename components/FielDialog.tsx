@@ -121,9 +121,6 @@ export function FileDialog<TFieldValues extends FieldValues>({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log("Files", files);
-
   return (
     <Dialog>
       <DialogTrigger asChild>

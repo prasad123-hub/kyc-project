@@ -22,32 +22,37 @@ import { personalDetailsSchema } from "@/utils/validations/personalDetails";
 import { FileDialog } from "../FielDialog";
 import { Button } from "../Button";
 import { X } from "lucide-react";
+import { Input } from "../UI/Input";
+import { useAuth } from "@/context/AuthContext";
 
 type Inputs = z.infer<typeof personalDetailsSchema>;
 
 export const PersonalDetailsForm = () => {
+  const { user } = useAuth();
   const [files, setFiles] = React.useState<FileWithPreview[] | null>(null);
   const dispatch = useAppDispatch();
 
   // REACT_HOOK_FORM
   const form = useForm<Inputs>({
     resolver: zodResolver(personalDetailsSchema),
-    // defaultValues: {
-    //   category: "skateboards",
-    // },
+    defaultValues: {
+      firstName: user?.displayName?.split(" ")[0],
+      lastName: user?.displayName?.split(" ")[1],
+      email: user?.email as string,
+    },
   });
 
   function onSubmit(data: Inputs) {
     console.log(data);
   }
 
-  console.log(" files from paren", files);
   return (
     <>
       <div className="py-6">
         <h2 className="text-2xl font-medium pb-6">Personal Details form</h2>
         <Form {...form}>
           <form
+            className="grid w-full max-w-2xl gap-5"
             onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
           >
             <FormItem className="flex w-full flex-col gap-1.5">
@@ -86,9 +91,65 @@ export const PersonalDetailsForm = () => {
                 />
               </FormControl>
               <UncontrolledFormMessage
-                message={form.formState.errors.images?.message}
+                message={form.formState.errors.images?.message as string}
               />
             </FormItem>
+            <div className="flex flex-col items-start gap-6 sm:flex-row">
+              <FormItem className="w-full">
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.firstName}
+                    placeholder="Type product name here."
+                    {...form.register("firstName")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.firstName?.message}
+                />
+              </FormItem>
+              <FormItem className="w-full">
+                <FormLabel>Middle Name</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.middleName}
+                    placeholder="Type product name here."
+                    {...form.register("middleName")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.middleName?.message}
+                />
+              </FormItem>
+            </div>
+            <div className="flex flex-col items-start gap-6 sm:flex-row">
+              <FormItem className="w-full">
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.lastName}
+                    placeholder="Type product name here."
+                    {...form.register("lastName")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.lastName?.message}
+                />
+              </FormItem>
+              <FormItem className="w-full">
+                <FormLabel>Email Id</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.middleName}
+                    placeholder="Type product name here."
+                    {...form.register("email")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.email?.message}
+                />
+              </FormItem>
+            </div>
             <Button type="submit">Submit</Button>
           </form>
         </Form>
