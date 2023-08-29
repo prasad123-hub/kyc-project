@@ -31,4 +31,21 @@ export const personalDetailsSchema = z.object({
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       ".jpg, .jpeg, .png and .webp files are accepted."
     ),
+  dob: z.date(),
+  gender: z.string(),
+  phone: z
+    .string()
+    .min(10, {
+      message: "Enter 10 Digit Number",
+    })
+    .refine((value) => /^\d{10}$/.test(value), {
+      message: "Must be a 10-digit number.",
+    }),
+  address: z.string().min(1, { message: "This is required field" }),
+  state: z.string().min(1, { message: "This is required field" }),
+  district: z.string().min(1, { message: "This is required field" }),
+  city: z.string().min(1, { message: "This is required field" }),
+  pincode: z.string().refine((value) => /^\d{6}$/.test(value), {
+    message: "Must be a 6-digit number.",
+  }),
 });

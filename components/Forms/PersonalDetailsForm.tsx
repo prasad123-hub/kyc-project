@@ -7,6 +7,21 @@ import { useForm } from "react-hook-form";
 import { nextStep } from "@/slices/StepSlice";
 import { toast } from "sonner";
 import { type z } from "zod";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/UI/Popover";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/UI/Select";
 
 // Import Form Components
 import {
@@ -21,9 +36,12 @@ import {
 import { personalDetailsSchema } from "@/utils/validations/personalDetails";
 import { FileDialog } from "../FielDialog";
 import { Button } from "../Button";
-import { X } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Input } from "../UI/Input";
 import { useAuth } from "@/context/AuthContext";
+import { Calendar } from "@/components/UI/Calender";
+import { cn } from "@/utils";
+import { format } from "date-fns";
 
 type Inputs = z.infer<typeof personalDetailsSchema>;
 
@@ -147,6 +165,154 @@ export const PersonalDetailsForm = () => {
                 </FormControl>
                 <UncontrolledFormMessage
                   message={form.formState.errors.email?.message}
+                />
+              </FormItem>
+            </div>
+            <div className="flex flex-col items-center gap-6 sm:flex-row">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem className="w-full flex flex-col justify-center gap-1">
+                    <FormLabel>Date of birth</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value as Date, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className=" w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          captionLayout="dropdown-buttons"
+                          selected={field.value as Date}
+                          onSelect={field.onChange}
+                          fromYear={1960}
+                          toYear={2030}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Select Gender</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full focus:ring-0">
+                        <SelectValue placeholder="Select a gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col items-start gap-6 sm:flex-row">
+              <FormItem className="w-full">
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.phone}
+                    placeholder="Enter 10 digit number."
+                    {...form.register("phone")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.phone?.message}
+                />
+              </FormItem>
+              <FormItem className="w-full">
+                <FormLabel>State</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.state}
+                    placeholder="Enter state"
+                    {...form.register("state")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.state?.message}
+                />
+              </FormItem>
+            </div>
+            <div className="flex flex-col items-start gap-6 sm:flex-row">
+              <FormItem className="w-full">
+                <FormLabel>Address Line</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.address}
+                    placeholder="Enter your address"
+                    {...form.register("address")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.address?.message}
+                />
+              </FormItem>
+              <FormItem className="w-full">
+                <FormLabel>District</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.district}
+                    placeholder="Enter district"
+                    {...form.register("district")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.district?.message}
+                />
+              </FormItem>
+            </div>
+            <div className="flex flex-col items-start gap-6 sm:flex-row">
+              <FormItem className="w-full">
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.city}
+                    placeholder="Enter your city"
+                    {...form.register("city")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.city?.message}
+                />
+              </FormItem>
+              <FormItem className="w-full">
+                <FormLabel>Pin Code</FormLabel>
+                <FormControl>
+                  <Input
+                    aria-invalid={!!form.formState.errors.pincode}
+                    placeholder="Enter 6 digit pincode"
+                    {...form.register("pincode")}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.pincode?.message}
                 />
               </FormItem>
             </div>
